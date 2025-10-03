@@ -23,9 +23,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book createBook(BookDTO bookDTO) {
-        // TODO Auto-generated method stub
+        Book newBook = new Book();
 
-        return null;
+        newBook.setTitle(bookDTO.getTitle());
+        newBook.setAuthor(bookDTO.getAuthor());
+        newBook.setIsbn(bookDTO.getIsbn());
+        newBook.setLocationId(bookDTO.getLocationId());
+        newBook.setOwnerId(bookDTO.getOwnerId());
+
+        return bookRepository.save(newBook);
     }
 
     @Override
