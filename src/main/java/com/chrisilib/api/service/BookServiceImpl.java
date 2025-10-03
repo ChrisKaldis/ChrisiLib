@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.chrisilib.api.dto.BookDTO;
@@ -36,16 +37,38 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooks(String query, Long locationId, Long ownerId) {
-        // TODO Auto-generated method stub
+        Specification<Book> spec = Specification.unrestricted();
 
-        return Collections.emptyList();
+        if (query != null && !query.isEmpty()) {
+            spec = spec.and((root, q, criteriaBuilder) ->
+                criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("title")),
+                                            "%" + query.toLowerCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("author")),
+                                            "%" + query.toLowerCase() + "%")
+                )
+            );
+        }
+
+        if (locationId != null) {
+            spec = spec.and((root, q, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("locationId"), locationId)
+            );
+        }
+
+        if (ownerId != null) {
+            spec = spec.and((root, q, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("ownerId"), ownerId)
+            );
+        }
+
+        return bookRepository.findAll(spec);
     }
 
     @Override
     public Optional<Book> findBookById(Long id) {
-        // TODO Auto-generated method stub
 
-        return Optional.empty();
+        return bookRepository.findById(id);
     }
 
     @Override
