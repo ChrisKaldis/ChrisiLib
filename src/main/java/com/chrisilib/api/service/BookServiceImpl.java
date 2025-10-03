@@ -1,6 +1,5 @@
 package com.chrisilib.api.service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,8 +8,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.chrisilib.api.dto.BookDTO;
+import com.chrisilib.api.exception.ResourceNotFoundException;
 import com.chrisilib.api.model.Book;
 import com.chrisilib.api.repository.BookRepository;
+
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -73,9 +74,21 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book updateBook(Long id, BookDTO bookDetails) {
-        // TODO Auto-generated method stub
+        Book existingBook = bookRepository.findById(id).orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                    "Book not found with id: " + id
+                                )
+                            );
 
-        return null;
+        existingBook.setTitle(bookDetails.getTitle());
+        existingBook.setAuthor(bookDetails.getAuthor());
+        existingBook.setIsbn(bookDetails.getIsbn());
+        existingBook.setLocationId(bookDetails.getLocationId());
+        existingBook.setOwnerId(bookDetails.getOwnerId());
+
+        Book updatedBook = bookRepository.save(existingBook);
+
+        return updatedBook;
     }
 
     @Override
