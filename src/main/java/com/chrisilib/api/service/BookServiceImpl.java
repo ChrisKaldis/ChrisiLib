@@ -93,9 +93,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(Long id) {
-        // TODO Auto-generated method stub
+        if (!bookRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                "Book not found with id: " + id
+            );
+        }
 
-        return ;
+        bookRepository.deleteById(id);
     }
-    
+
 }
