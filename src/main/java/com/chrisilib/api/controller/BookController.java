@@ -20,6 +20,8 @@ import com.chrisilib.api.dto.BookDTO;
 import com.chrisilib.api.model.Book;
 import com.chrisilib.api.service.BookService;
 
+import jakarta.validation.Valid;
+
 
 /**
  * REST Controller for managing books in the ChrisiLib application.
@@ -46,7 +48,7 @@ public class BookController {
      * @return The created book with a 201 Created status.
      */
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody BookDTO bookDTO) {
+    public ResponseEntity<Book> addBook(@Valid @RequestBody BookDTO bookDTO) {
         // The service will contain the logic to check if an ISBN is present
         // and fetch data, or simply save the manually entered data.
         Book savedBook = bookService.createBook(bookDTO);
@@ -108,7 +110,7 @@ public class BookController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Long id,
-        @RequestBody BookDTO bookDetails
+        @Valid @RequestBody BookDTO bookDetails
     ) {
         Book updatedBook = bookService.updateBook(id, bookDetails);
 
