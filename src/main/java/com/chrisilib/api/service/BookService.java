@@ -7,9 +7,9 @@ import com.chrisilib.api.dto.BookDTO;
 import com.chrisilib.api.model.Book;
 
 public interface BookService {
-    
+
     Book createBook(BookDTO bookDTO);
-    List<Book> findBooks(String query, Long locationId, Long ownerId);
+    List<Book> findBooks(String query, Long bookcaseId, Long ownerId);
     Optional<Book> findBookById(Long id);
     Book updateBook(Long id, BookDTO bookDetails);
     void deleteBook(Long id);

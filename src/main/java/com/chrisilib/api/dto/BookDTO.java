@@ -8,7 +8,7 @@ public class BookDTO {
     private String title;
     private String author;
     private String isbn;
-    private Long locationId;
+    private Long bookcaseId;
     private Long ownerId;
 
 }

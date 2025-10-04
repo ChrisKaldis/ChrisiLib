@@ -1,12 +1,22 @@
 package com.chrisilib.api.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Data;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class Book {
     
@@ -17,7 +27,28 @@ public class Book {
     private String title;
     private String author;
     private String isbn;
-    private Long locationId;
     private Long ownerId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookcase_id")
+    private Bookcase bookcase;
+
+    // Safer equals() and hashCode() for JPA entities.
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        return id != null && Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return getClass().hashCode();
+    }
 
 }
