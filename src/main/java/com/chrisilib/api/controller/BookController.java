@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.chrisilib.api.dto.BookDTO;
@@ -57,30 +57,30 @@ public class BookController {
     /**
      * GET /api/v1/books
      * Searchs for a book in the library.
-     * It can filter by a general query string, location, or owner.
+     * It can filter by a general query string, bookcase, or owner.
      * All parameters are optional.
      * 
      * Examples:
      * - /api/v1/books -> Get all books
      * - /api/v1/books?query=Orwell -> Searches for "Orwell" in title/author
-     * - /api/v1/books?locationId=2 -> Gets all books in location with ID 2
+     * - /api/v1/books?bookcaseId=2 -> Gets all books in bookcase with ID 2
      * - /api/v1/books?ownerId=5&query=Dune -> Finds "Dune" owned by user with ID 5
      * 
      * @param query Optional search term (for title, author, etc.).
-     * @param locationId Optional ID of the location (e.g., "Parents' House").
+     * @param bookcaseId Optional ID of the bookcase (e.g., "George's Bookcase 1").
      * @param ownerId Optional ID of the owner (you or a friend).
      * @return A list of books matching the criteria.
      */
     @GetMapping
     public ResponseEntity<List<Book>> searchBooks(
-        @RequestPart(required = false) String query,
-        @RequestPart(required = false) Long locationId,
-        @RequestPart(required = false) Long ownerId
+        @RequestParam(required = false) String query,
+        @RequestParam(required = false) Long bookcaseId,
+        @RequestParam(required = false) Long ownerId
     ) {
-        List<Book> books = bookService.findBooks(query, locationId, ownerId);
+        List<Book> books = bookService.findBooks(query, bookcaseId, ownerId);
 
         return ResponseEntity.ok(books);
-    } 
+    }
 
     /**
      * GET /api/v1/books/{id}
@@ -92,7 +92,7 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
         Optional<Book> book = bookService.findBookById(id);
-        
+   
         return book.map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
     }

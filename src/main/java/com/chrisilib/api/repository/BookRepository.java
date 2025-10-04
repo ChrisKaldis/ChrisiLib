@@ -8,7 +8,7 @@ import com.chrisilib.api.model.Book;
 
 
 @Repository
-public interface BookRepository extends  JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
+public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
 
     // Spring Data JPA will automatically provide methods like
     // save(), findById(), findAll(), deleteById(), etc.
